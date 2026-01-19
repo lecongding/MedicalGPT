@@ -36,13 +36,21 @@ from transformers import (
     HfArgumentParser,
     Trainer,
     Seq2SeqTrainingArguments,
-    is_torch_tpu_available,
     set_seed,
     BitsAndBytesConfig,
 )
 from transformers.trainer import TRAINING_ARGS_NAME
 from transformers.utils.versions import require_version
 from transformers.integrations import is_deepspeed_zero3_enabled
+# compat: transformers 4.5x+ removed top-level is_torch_tpu_available
+try:
+    from transformers.utils import is_torch_xla_available
+
+    def is_torch_tpu_available(check_device=True):
+        return is_torch_xla_available()
+except Exception:
+    def is_torch_tpu_available(check_device=True):
+        return False
 
 
 @dataclass
