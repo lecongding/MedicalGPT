@@ -801,7 +801,7 @@ def main():
         output_layer = getattr(model, "lm_head")
         if isinstance(output_layer, torch.nn.Linear) and output_layer.weight.dtype != torch.float32:
             def fp32_forward_post_hook(module: torch.nn.Module, args: Tuple[torch.Tensor], output: torch.Tensor):
-                return output.to(torch.float32)
+                return output
 
             output_layer.register_forward_hook(fp32_forward_post_hook)
 
